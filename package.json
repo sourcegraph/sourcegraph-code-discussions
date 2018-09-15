@@ -1,0 +1,86 @@
+{
+  "name": "sourcegraph-discussions",
+  "publisher": "slimsag",
+  "title": "Sourcegraph Discussions Extension",
+  "description": "Write comments on code directly on Sourcegraph/GitHub! Review existing code continuously",
+  "activationEvents": [
+    "*"
+  ],
+  "main": "dist/extension.js",
+  "scripts": {
+    "sourcegraph:prepublish": "parcel build src/extension.ts"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.9.7",
+    "sourcegraph": "^16.0.0",
+    "typescript": "^3.0.3"
+  },
+  "dependencies": {
+    "@types/date-fns": "^2.6.0",
+    "date-fns": "^1.29.0"
+  },
+  "contributes": {
+    "actions": [
+      {
+        "id": "discussions.decorations.toggle",
+        "command": "updateConfiguration",
+        "commandArguments": [
+          [
+            "discussions.decorations.inline"
+          ],
+          "${!config.discussions.decorations.inline}",
+          null,
+          "json"
+        ],
+        "title": "${config.discussions.decorations.inline && \"Hide\" || \"Show\"} inline discussions on file",
+        "category": "Discussions",
+        "actionItem": {
+          "label": "Inline discussions",
+          "description": "${config.discussions.decorations.inline && \"Hide\" || \"Show\"} inline discussions"
+        }
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "action": "discussions.decorations.toggle",
+          "alt": "discussions.link.fileList",
+          "when": "resource && !config.discussions.hideDiscussionsButton"
+        }
+      ],
+      "commandPalette": [
+        {
+          "action": "discussions.decorations.toggle",
+          "when": "resource"
+        },
+        {
+          "action": "discussions.link.fileList",
+          "when": "resource && get(context, `discussions.fileURL.${resource.uri}`)"
+        },
+        {
+          "action": "discussions.help"
+        }
+      ],
+      "help": [
+        {
+          "action": "discussions.help"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Code discussions settings",
+      "properties": {
+        "discussions.decorations.inline": {
+          "description": "Whether or not to display discussions inline.",
+          "type": "boolean",
+          "default": true
+        },
+        "discussions.hideDiscussionsButton": {
+          "description": "Whether to hide the discussions item in the toolbar (in a button labeled \"inline discussions\").",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    }
+  }
+}
