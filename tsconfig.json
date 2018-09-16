@@ -3,12 +3,12 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es6",
-    "outDir": "out",
+    "outDir": "dist",
     "lib": ["es6"],
     "sourceMap": true,
     "rootDir": "src",
     "esModuleInterop": true,
     "strict": true
   },
-  "exclude": ["node_modules", ".vscode-test"]
+  "exclude": ["node_modules"]
 }
