@@ -315,8 +315,24 @@ declare namespace SourcegraphGQL {
 
     /**
      * When present, lists only the threads whose target is a repository with this ID.
+     *
+     * Only one of 'targetRepositoryID', 'targetRepositoryName', or 'targetRepositoryGitCloneURL' may be specified.
      */
     targetRepositoryID?: string | null;
+
+    /**
+     * When present, lists only the threads whose target is a repository with this name.
+     *
+     * Only one of 'targetRepositoryID', 'targetRepositoryName', or 'targetRepositoryGitCloneURL' may be specified.
+     */
+    targetRepositoryName?: string | null;
+
+    /**
+     * When present, lists only the threads whose target is a repository with this Git clone URL.
+     *
+     * Only one of 'targetRepositoryID', 'targetRepositoryName', or 'targetRepositoryGitCloneURL' may be specified.
+     */
+    targetRepositoryGitCloneURL?: string | null;
 
     /**
      * When present, lists only the threads whose target is a repository with this file path.
@@ -6333,8 +6349,24 @@ declare namespace SourcegraphGQL {
   interface IDiscussionThreadTargetRepoInput {
     /**
      * The repository in which the thread was created.
+     *
+     * One of 'repositoryID', 'repositoryGitCloneURL', or 'repositoryName' must be specified.
      */
-    repository: string;
+    repositoryID?: string | null;
+
+    /**
+     * The repository in which the thread was created.
+     *
+     * One of 'repositoryID', 'repositoryGitCloneURL', or 'repositoryName' must be specified.
+     */
+    repositoryName?: string | null;
+
+    /**
+     * The repository in which the thread was created.
+     *
+     * One of 'repositoryID', 'repositoryGitCloneURL', or 'repositoryName' must be specified.
+     */
+    repositoryGitCloneURL?: string | null;
 
     /**
      * The path (relative to the repository root) of the file or directory that
