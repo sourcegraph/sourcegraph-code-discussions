@@ -1,103 +1,92 @@
-import * as sourcegraph from "sourcegraph";
-import { fetchDiscussionThreads } from "./api";
-import * as GQL from "./graphqlschema";
-import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
-import { resolveSettings, Settings } from "./settings";
+import * as sourcegraph from 'sourcegraph'
+import { fetchDiscussionThreads } from './api'
+import * as GQL from './graphqlschema'
+import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
+import { resolveSettings, Settings } from './settings'
 
 export function activate(): void {
-  function activeEditor(): sourcegraph.CodeEditor | undefined {
-    return sourcegraph.app.activeWindow
-      ? sourcegraph.app.activeWindow.visibleViewComponents[0]
-      : undefined;
-  }
-
-  // When the configuration or current file changes, publish new decorations.
-  async function decorate(
-    editor: sourcegraph.CodeEditor | undefined = activeEditor()
-  ): Promise<void> {
-    if (!editor) {
-      return;
+    function activeEditor(): sourcegraph.CodeEditor | undefined {
+        return sourcegraph.app.activeWindow ? sourcegraph.app.activeWindow.visibleViewComponents[0] : undefined
     }
 
-    const u = new URL(editor.document.uri);
-    const uri = {
-      repositoryName: u.pathname.slice(2),
-      revision: u.search.slice(1),
-      filePath: u.hash.slice(1)
-    };
+    // When the configuration or current file changes, publish new decorations.
+    async function decorate(editor: sourcegraph.CodeEditor | undefined = activeEditor()): Promise<void> {
+        if (!editor) {
+            return
+        }
 
-    const threads = await fetchDiscussionThreads({
-      first: 10000,
-      targetRepositoryName: uri.repositoryName,
-      targetRepositoryPath: uri.filePath,
-      relativeRev: uri.revision
-    });
+        const u = new URL(editor.document.uri)
+        const uri = {
+            repositoryName: u.pathname.slice(2),
+            revision: u.search.slice(1),
+            filePath: u.hash.slice(1),
+        }
 
-    let decorations: sourcegraph.TextDocumentDecoration[] = [];
-    threads.nodes.forEach(thread => {
-      const settings = resolveSettings(
-        sourcegraph.configuration.get<Settings>().value
-      );
-      if (!settings["discussions.decorations.inline"]) {
-        return;
-      }
+        const threads = await fetchDiscussionThreads({
+            first: 10000,
+            targetRepositoryName: uri.repositoryName,
+            targetRepositoryPath: uri.filePath,
+            relativeRev: uri.revision,
+        })
 
-      if (thread.target.__typename !== "DiscussionThreadTargetRepo") {
-        return;
-      }
-      var target = thread.target as GQL.IDiscussionThreadTargetRepo;
-      if (target.relativePath !== uri.filePath) {
-        // TODO(slimsag): shouldn't the discussions API return threads created in different files and moved here, too? lol :facepalm:
-        return; // comment has since moved to a different file.
-      }
+        let decorations: sourcegraph.TextDocumentDecoration[] = []
+        threads.nodes.forEach(thread => {
+            const settings = resolveSettings(sourcegraph.configuration.get<Settings>().value)
+            if (!settings['discussions.decorations.inline']) {
+                return
+            }
 
-      const shortTitle =
-        thread.title.length > 29
-          ? thread.title.slice(0, 29) + "…"
-          : thread.title;
+            if (thread.target.__typename !== 'DiscussionThreadTargetRepo') {
+                return
+            }
+            var target = thread.target as GQL.IDiscussionThreadTargetRepo
+            if (target.relativePath !== uri.filePath) {
+                // TODO(slimsag): shouldn't the discussions API return threads created in different files and moved here, too? lol :facepalm:
+                return // comment has since moved to a different file.
+            }
 
-      const describeThread = title =>
-        `"${title}" by ${thread.author.displayName ||
-          thread.author.username} ${distanceInWordsToNow(
-          thread.createdAt
-        )} ago`;
+            const shortTitle = thread.title.length > 29 ? thread.title.slice(0, 29) + '…' : thread.title
 
-      // TODO(slimsag): color scheme detection is impossible, see https://github.com/sourcegraph/sourcegraph-extension-api/issues/63
-      const color = location.host === "github.com" ? "black" : "#0366d6"; // #3b4d6e
-      const backgroundColor =
-        location.host === "github.com" ? "white" : "rgba(28, 126, 214, 0.3)"; // #151c28
+            const describeThread = title =>
+                `"${title}" by ${thread.author.displayName || thread.author.username} ${distanceInWordsToNow(
+                    thread.createdAt
+                )} ago`
 
-      decorations.push({
-        range: new sourcegraph.Range(
-          new sourcegraph.Position(
-            target.relativeSelection.startLine - 1,
-            target.relativeSelection.startCharacter
-          ),
-          new sourcegraph.Position(
-            target.relativeSelection.endLine - 1,
-            target.relativeSelection.endCharacter
-          )
-        ),
-        after: {
-          contentText: " 💬 " + describeThread(shortTitle),
-          linkURL: location.host
-            ? thread.inlineURL.slice(thread.inlineURL.lastIndexOf("#"))
-            : thread.inlineURL,
-          hoverMessage: " " + describeThread(thread.title),
-          color: color
-        },
-        backgroundColor: backgroundColor
-      });
-    });
+            // TODO(slimsag): color scheme detection is impossible, see https://github.com/sourcegraph/sourcegraph-extension-api/issues/63
+            const color = location.host === 'github.com' ? 'black' : '#0366d6' // #3b4d6e
+            const backgroundColor = location.host === 'github.com' ? 'white' : 'rgba(28, 126, 214, 0.3)' // #151c28
 
-    try {
-      editor.setDecorations(null, decorations);
-    } catch (err) {
-      console.error("Decoration error:", err);
+            decorations.push({
+                range: new sourcegraph.Range(
+                    new sourcegraph.Position(
+                        target.relativeSelection.startLine - 1,
+                        target.relativeSelection.startCharacter
+                    ),
+                    new sourcegraph.Position(
+                        target.relativeSelection.endLine - 1,
+                        target.relativeSelection.endCharacter
+                    )
+                ),
+                after: {
+                    contentText: ' 💬 ' + describeThread(shortTitle),
+                    linkURL: location.host
+                        ? thread.inlineURL.slice(thread.inlineURL.lastIndexOf('#'))
+                        : thread.inlineURL,
+                    hoverMessage: ' ' + describeThread(thread.title),
+                    color: color,
+                },
+                backgroundColor: backgroundColor,
+            })
+        })
+
+        try {
+            editor.setDecorations(null, decorations)
+        } catch (err) {
+            console.error('Decoration error:', err)
+        }
     }
-  }
-  sourcegraph.configuration.subscribe(() => decorate());
+    sourcegraph.configuration.subscribe(() => decorate())
 
-  // TODO(sqs): Add a way to get notified when a new editor is opened (because we want to be able to pass an `editor` to `updateDecorations`/`updateContext`, but this subscription just gives us a `doc`).
-  sourcegraph.workspace.onDidOpenTextDocument.subscribe(() => decorate());
+    // TODO(sqs): Add a way to get notified when a new editor is opened (because we want to be able to pass an `editor` to `updateDecorations`/`updateContext`, but this subscription just gives us a `doc`).
+    sourcegraph.workspace.onDidOpenTextDocument.subscribe(() => decorate())
 }

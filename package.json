@@ -8,12 +8,24 @@
   ],
   "main": "dist/extension.js",
   "scripts": {
-    "sourcegraph:prepublish": "parcel build src/extension.ts"
+    "sourcegraph:prepublish": "parcel build src/extension.ts",
+    "prettier": "prettier \"**/*.{ts,js,json,md}\" --list-different --write",
+    "tslint": "tslint \"src/**.ts\" --project tsconfig.json --config tslint.json",
+    "build": "tsc -p .",
+    "watch": "tsc -w -p .",
+    "graphql": "get-graphql-schema https://sourcegraph.com/.api/graphql --json | gql2ts -n SourcegraphGQL -o src/typings/SourcegraphGQL.d.ts"
   },
   "devDependencies": {
     "parcel-bundler": "^1.9.7",
     "sourcegraph": "^16.0.0",
-    "typescript": "^3.0.3"
+    "typescript": "^3.0.3",
+    "@sourcegraph/prettierrc": "^2.1.1",
+    "@sourcegraph/tsconfig": "^3.0.0",
+    "@sourcegraph/tslint-config": "^11.1.1",
+    "get-graphql-schema": "^2.1.1",
+    "gql2ts": "^1.8.2",
+    "prettier": "1.13.5",
+    "tslint": "^5.10.0"
   },
   "dependencies": {
     "@types/date-fns": "^2.6.0",
