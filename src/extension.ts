@@ -1,7 +1,7 @@
 import * as sourcegraph from 'sourcegraph'
-import { fetchDiscussionThreads } from './api'
-import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
+import { distanceInWordsToNow } from 'date-fns'
 import { resolveSettings, Settings } from './settings'
+import { fetchDiscussionThreads } from './shared/api'
 
 export function activate(): void {
     function activeEditor(): sourcegraph.CodeEditor | undefined {

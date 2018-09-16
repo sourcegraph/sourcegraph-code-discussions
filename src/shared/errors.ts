@@ -1,5 +1,3 @@
-// TODO: This file is allllll copypasta!
-
 export interface ErrorLike {
     message: string
     code?: string

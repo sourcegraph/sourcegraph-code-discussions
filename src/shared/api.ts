@@ -1,11 +1,5 @@
-// TODO: This file is allllll copypasta (kind of)!
-
-import * as sourcegraph from 'sourcegraph'
+import { queryGraphQL } from '../graphql'
 import { createAggregateError } from './errors'
-
-async function queryGraphQL(query: string, variables: any = {}) {
-    return sourcegraph.commands.executeCommand<any>('queryGraphQL', query, variables)
-}
 
 const discussionCommentFieldsFragment = `
     fragment DiscussionCommentFields on DiscussionComment {
@@ -21,7 +15,7 @@ const discussionCommentFieldsFragment = `
   `
 
 function discussionThreadFieldsFragment(relativeRev?: string): string {
-    var relativeRevFields: string = ''
+    let relativeRevFields = ''
     if (relativeRev) {
         relativeRevFields = `
         relativePath(rev: $relativeRev)
@@ -84,11 +78,11 @@ function discussionThreadFieldsFragment(relativeRev?: string): string {
  *
  * @return Promise that emits the new discussion thread.
  */
-async function createThread(
+export async function createThread(
     input: SourcegraphGQL.IDiscussionThreadCreateInput,
-    relativeRev: string = ''
+    relativeRev = ''
 ): Promise<SourcegraphGQL.IDiscussionThread> {
-    let { data, errors } = await queryGraphQL(
+    const { data, errors } = await queryGraphQL(
         `
         mutation CreateThread($input: DiscussionThreadCreateInput!, $relativeRev: String!) {
           discussions {
@@ -125,7 +119,7 @@ export async function fetchDiscussionThreads(opts: {
     relativeRev?: string
 }): Promise<SourcegraphGQL.IDiscussionThreadConnection> {
     opts.relativeRev = opts.relativeRev || ''
-    let { data, errors } = await queryGraphQL(
+    const { data, errors } = await queryGraphQL(
         `
         query DiscussionThreads(
           $first: Int
@@ -175,9 +169,9 @@ export async function fetchDiscussionThreads(opts: {
  */
 export async function fetchDiscussionThreadAndComments(
     threadID: string,
-    relativeRev: string = ''
+    relativeRev = ''
 ): Promise<SourcegraphGQL.IDiscussionThread> {
-    let { data, errors } = await queryGraphQL(
+    const { data, errors } = await queryGraphQL(
         `
         query DiscussionThreadComments($threadID: ID!, $relativeRev: String!) {
           discussionThreads(threadID: $threadID) {
@@ -217,9 +211,9 @@ export async function fetchDiscussionThreadAndComments(
 export async function addCommentToThread(
     threadID: string,
     contents: string,
-    relativeRev: string = ''
+    relativeRev = ''
 ): Promise<SourcegraphGQL.IDiscussionThread> {
-    let { data, errors } = await queryGraphQL(
+    const { data, errors } = await queryGraphQL(
         `
         mutation AddCommentToThread($threadID: ID!, $contents: String!, $relativeRev: String!) {
           discussions {
@@ -251,7 +245,7 @@ export async function addCommentToThread(
  * @return Promise that emits the HTML string, which is already sanitized and escaped and thus is always safe to render.
  */
 export async function renderMarkdown(markdown: string, options?: SourcegraphGQL.IMarkdownOptions): Promise<string> {
-    let { data, errors } = await queryGraphQL(
+    const { data, errors } = await queryGraphQL(
         `
         query RenderMarkdown($markdown: String!, $options: MarkdownOptions) {
           renderMarkdown(markdown: $markdown, options: $options)
