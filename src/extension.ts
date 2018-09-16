@@ -1,6 +1,5 @@
 import * as sourcegraph from 'sourcegraph'
 import { fetchDiscussionThreads } from './api'
-import * as GQL from './graphqlschema'
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
 import { resolveSettings, Settings } from './settings'
 
@@ -15,7 +14,7 @@ export function activate(): void {
             return
         }
 
-        const u = new URL(editor.document.uri)
+        const u = new (global as any).URL(editor.document.uri)
         const uri = {
             repositoryName: u.pathname.slice(2),
             revision: u.search.slice(1),
@@ -39,22 +38,25 @@ export function activate(): void {
             if (thread.target.__typename !== 'DiscussionThreadTargetRepo') {
                 return
             }
-            var target = thread.target as GQL.IDiscussionThreadTargetRepo
+            var target = thread.target as SourcegraphGQL.IDiscussionThreadTargetRepo
             if (target.relativePath !== uri.filePath) {
                 // TODO(slimsag): shouldn't the discussions API return threads created in different files and moved here, too? lol :facepalm:
                 return // comment has since moved to a different file.
             }
+            if (!target.relativeSelection) {
+                return // selection has no relative place in this revision of the file.
+            }
 
             const shortTitle = thread.title.length > 29 ? thread.title.slice(0, 29) + '…' : thread.title
 
-            const describeThread = title =>
+            const describeThread = (title: string) =>
                 `"${title}" by ${thread.author.displayName || thread.author.username} ${distanceInWordsToNow(
                     thread.createdAt
                 )} ago`
 
             // TODO(slimsag): color scheme detection is impossible, see https://github.com/sourcegraph/sourcegraph-extension-api/issues/63
-            const color = location.host === 'github.com' ? 'black' : '#0366d6' // #3b4d6e
-            const backgroundColor = location.host === 'github.com' ? 'white' : 'rgba(28, 126, 214, 0.3)' // #151c28
+            const color = (global as any).location.host === 'github.com' ? 'black' : '#0366d6' // #3b4d6e
+            const backgroundColor = (global as any).location.host === 'github.com' ? 'white' : 'rgba(28, 126, 214, 0.3)' // #151c28
 
             decorations.push({
                 range: new sourcegraph.Range(
@@ -69,9 +71,11 @@ export function activate(): void {
                 ),
                 after: {
                     contentText: ' 💬 ' + describeThread(shortTitle),
-                    linkURL: location.host
-                        ? thread.inlineURL.slice(thread.inlineURL.lastIndexOf('#'))
-                        : thread.inlineURL,
+                    linkURL: thread.inlineURL
+                        ? (global as any).location.host
+                            ? thread.inlineURL.slice(thread.inlineURL.lastIndexOf('#'))
+                            : thread.inlineURL
+                        : undefined,
                     hoverMessage: ' ' + describeThread(thread.title),
                     color: color,
                 },
