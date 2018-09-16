@@ -7,6 +7,7 @@ const discussionCommentFieldsFragment = `
       author {
         ...UserFields
       }
+      contents
       html
       inlineURL
       createdAt
@@ -90,13 +91,17 @@ export async function createThread(
               ...DiscussionThreadFields
               comments {
                 totalCount
+                nodes {
+                  ...DiscussionCommentFields
+                }
               }
             }
           }
         }
         ${discussionThreadFieldsFragment(relativeRev)}
+        ${discussionCommentFieldsFragment}
       `,
-        { input }
+        { input, relativeRev }
     )
     if (!data || !data.discussions || !data.discussions.createThread) {
         throw createAggregateError(errors)
@@ -190,7 +195,7 @@ export async function fetchDiscussionThreadAndComments(
         ${discussionThreadFieldsFragment(relativeRev)}
         ${discussionCommentFieldsFragment}
       `,
-        { threadID }
+        { threadID, relativeRev }
     )
     if (
         !data ||
@@ -231,7 +236,7 @@ export async function addCommentToThread(
         ${discussionThreadFieldsFragment(relativeRev)}
         ${discussionCommentFieldsFragment}
       `,
-        { threadID, contents }
+        { threadID, contents, relativeRev }
     )
     if (!data || !data.discussions || !data.discussions.addCommentToThread) {
         throw createAggregateError(errors)
