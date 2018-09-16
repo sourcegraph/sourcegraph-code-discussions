@@ -1,5 +1,5 @@
 import * as sourcegraph from "sourcegraph";
-import { fetchDiscussionThreads, resolveRepository } from "./api";
+import { fetchDiscussionThreads } from "./api";
 import * as GQL from "./graphqlschema";
 import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
 import { resolveSettings, Settings } from "./settings";
@@ -26,10 +26,9 @@ export function activate(): void {
       filePath: u.hash.slice(1)
     };
 
-    const repoID = await resolveRepository(uri.repositoryName);
     const threads = await fetchDiscussionThreads({
       first: 10000,
-      targetRepositoryID: repoID,
+      targetRepositoryName: uri.repositoryName,
       targetRepositoryPath: uri.filePath,
       relativeRev: uri.revision
     });

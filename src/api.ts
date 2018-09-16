@@ -124,6 +124,8 @@ export async function fetchDiscussionThreads(opts: {
   threadID?: GQL.ID;
   authorUserID?: GQL.ID;
   targetRepositoryID?: GQL.ID;
+  targetRepositoryName?: string;
+  targetRepositoryGitCloneURL?: string;
   targetRepositoryPath?: string;
   relativeRev?: string;
 }): Promise<GQL.IDiscussionThreadConnection> {
@@ -136,6 +138,8 @@ export async function fetchDiscussionThreads(opts: {
           $threadID: ID
           $authorUserID: ID
           $targetRepositoryID: ID
+          $targetRepositoryName: String
+          $targetRepositoryGitCloneURL: String
           $targetRepositoryPath: String
           $relativeRev: String!
         ) {
@@ -145,6 +149,8 @@ export async function fetchDiscussionThreads(opts: {
             threadID: $threadID
             authorUserID: $authorUserID
             targetRepositoryID: $targetRepositoryID
+            targetRepositoryName: $targetRepositoryName
+            targetRepositoryGitCloneURL: $targetRepositoryGitCloneURL
             targetRepositoryPath: $targetRepositoryPath
           ) {
             totalCount
@@ -265,28 +271,4 @@ export async function renderMarkdown(
     throw createAggregateError(errors);
   }
   return data.renderMarkdown;
-}
-
-/**
- * Turn a repository name into a GraphQL repository ID.
- *
- * @return Promise that emits the ID.
- */
-export async function resolveRepository(
-  repositoryName: string
-): Promise<GQL.ID> {
-  let { data, errors } = await queryGraphQL(
-    `
-      query ResolveRepository($repositoryName: String!) {
-        repository(name:$repositoryName) {
-          id
-        }
-      }
-      `,
-    { repositoryName }
-  );
-  if (!data || !data.repository || !data.repository.id) {
-    throw createAggregateError(errors);
-  }
-  return data.repository.id;
 }
