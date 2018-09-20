@@ -1,8 +1,8 @@
 {
-  "name": "sourcegraph-discussions",
-  "publisher": "slimsag",
-  "title": "Sourcegraph Discussions Extension",
-  "description": "Write comments on code directly on Sourcegraph/GitHub! Review existing code continuously",
+  "name": "code-discussions",
+  "publisher": "sourcegraph",
+  "title": "Code Discussions — discuss code contextually, review code continuously.",
+  "description": "Lets you write comments on code while browsing, discover discussions while browsing on GitHub, review code continuously, and share knowledge with your team.",
   "activationEvents": [
     "*"
   ],
