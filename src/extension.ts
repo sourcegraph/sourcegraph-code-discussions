@@ -54,7 +54,7 @@ export function activate(): void {
                     thread.createdAt
                 )} ago`
 
-            // TODO(slimsag): color scheme detection is impossible, see https://github.com/sourcegraph/sourcegraph-extension-api/issues/63
+            // TODO(slimsag): color scheme detection was impossible when this was written, see https://github.com/sourcegraph/sourcegraph/issues/732
             const color = (global as any).location.host === 'github.com' ? 'black' : '#0366d6' // #3b4d6e
             const backgroundColor = (global as any).location.host === 'github.com' ? 'white' : 'rgba(28, 126, 214, 0.3)' // #151c28
 

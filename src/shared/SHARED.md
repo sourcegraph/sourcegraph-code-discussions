@@ -1,6 +1,6 @@
 This code is shared between:
 
-- https://github.com/sourcegraph/sourcegraph-extension-api
+- https://docs.sourcegraph.com/extensions
 - https://github.com/sourcegraph/sourcegraph-vscode
 
 Eventually it should be moved into an npm package somewhere. Until then, ensure
