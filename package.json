@@ -16,7 +16,7 @@
     "graphql": "get-graphql-schema https://sourcegraph.com/.api/graphql --json | gql2ts -n SourcegraphGQL -o src/typings/SourcegraphGQL.d.ts"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.9.7",
+    "parcel-bundler": "^1.10.0",
     "sourcegraph": "^16.0.0",
     "typescript": "^3.0.3",
     "@sourcegraph/prettierrc": "^2.1.1",
