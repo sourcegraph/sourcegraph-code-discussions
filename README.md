@@ -1,4 +1,6 @@
-# Sourcegraph Code Discussions <em><sub><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;— discuss code contextually, review code continuously.</sub></em>
+# Sourcegraph code discussions
+
+Discuss code contextually, review code continuously.
 
 - 🖥️ Write comments on code while browsing on Sourcegraph.com.
 - 🧠 Discover discussions and existing knowledge on GitHub & Sourcegraph while browsing code.
@@ -7,7 +9,7 @@
 
 ## ⚡ Experimental warning
 
-Code Discussions is an experiment [by Sourcegraph](https://about.sourcegraph.com/about). It is not yet ready for widespread production use.
+Code discussions is an experiment [by Sourcegraph](https://about.sourcegraph.com/about). It is not yet ready for widespread production use.
 
 If you're as excited about improving how code is discussed as much as we are, then please try it out, [give us feedback and file issues](https://github.com/sourcegraph/issues/issues), and reach out to us (hi@sourcegraph.com). We'd love to hear from you!
 
