@@ -51,8 +51,7 @@
         "title": "${config.discussions.decorations.inline && \"Hide\" || \"Show\"} inline discussions on file",
         "category": "Discussions",
         "actionItem": {
-          "iconDescription": "Inline discussions",
-          "iconURL": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBmaWxsPSIjODA4MDgwIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iIzgwODA4MCIgZD0iTTIwLDJBMiwyIDAgMCwxIDIyLDRWMTZBMiwyIDAgMCwxIDIwLDE4SDZMMiwyMlY0QzIsMi44OSAyLjksMiA0LDJIMjBNNCw0VjE3LjE3TDUuMTcsMTZIMjBWNEg0TTYsN0gxOFY5SDZWN002LDExSDE1VjEzSDZWMTFaIiAvPjwvc3ZnPg==",
+          "label": "Discussions",
           "description": "${config.discussions.decorations.inline && \"Hide\" || \"Show\"} inline discussions"
         }
       }
