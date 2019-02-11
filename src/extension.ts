@@ -3,6 +3,8 @@ import { distanceInWordsToNow } from 'date-fns'
 import { resolveSettings, Settings } from './settings'
 import { fetchDiscussionThreads } from './shared/api'
 
+const decorationType = sourcegraph.app.createDecorationType && sourcegraph.app.createDecorationType()
+
 export function activate(): void {
     function activeEditor(): sourcegraph.CodeEditor | undefined {
         return sourcegraph.app.activeWindow ? sourcegraph.app.activeWindow.visibleViewComponents[0] : undefined
@@ -84,7 +86,7 @@ export function activate(): void {
         })
 
         try {
-            editor.setDecorations(null, decorations)
+            editor.setDecorations(decorationType, decorations)
         } catch (err) {
             console.error('Decoration error:', err)
         }
