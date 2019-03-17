@@ -17,18 +17,13 @@ export function activate(): void {
             return
         }
 
-        const u = new URL(editor.document.uri)
-        const uri = {
-            repositoryName: u.pathname.slice(2),
-            revision: u.search.slice(1),
-            filePath: u.hash.slice(1),
-        }
+        const uri = resolveURI(editor.document.uri)
 
         const threads = await fetchDiscussionThreads({
             first: 10000,
-            targetRepositoryName: uri.repositoryName,
-            targetRepositoryPath: uri.filePath,
-            relativeRev: uri.revision,
+            targetRepositoryName: uri.repo,
+            targetRepositoryPath: uri.path,
+            relativeRev: uri.rev,
         })
 
         const decorations: sourcegraph.TextDocumentDecoration[] = []
@@ -42,7 +37,7 @@ export function activate(): void {
                 return
             }
             const target: SourcegraphGQL.IDiscussionThreadTargetRepo = thread.target
-            if (target.relativePath !== uri.filePath) {
+            if (target.relativePath !== uri.path) {
                 // TODO(slimsag): shouldn't the discussions API return threads created in different files and moved here, too? lol :facepalm:
                 return // comment has since moved to a different file.
             }
