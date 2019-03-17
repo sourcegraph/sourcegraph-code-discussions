@@ -1,7 +1,8 @@
-import * as sourcegraph from 'sourcegraph'
 import { distanceInWordsToNow } from 'date-fns'
+import * as sourcegraph from 'sourcegraph'
 import { resolveSettings, Settings } from './settings'
 import { fetchDiscussionThreads } from './shared/api'
+import { resolveURI } from './uri'
 
 const decorationType = sourcegraph.app.createDecorationType && sourcegraph.app.createDecorationType()
 
@@ -16,7 +17,7 @@ export function activate(): void {
             return
         }
 
-        const u = new (global as any).URL(editor.document.uri)
+        const u = new URL(editor.document.uri)
         const uri = {
             repositoryName: u.pathname.slice(2),
             revision: u.search.slice(1),
@@ -30,8 +31,8 @@ export function activate(): void {
             relativeRev: uri.revision,
         })
 
-        let decorations: sourcegraph.TextDocumentDecoration[] = []
-        threads.nodes.forEach(thread => {
+        const decorations: sourcegraph.TextDocumentDecoration[] = []
+        for (const thread of threads.nodes) {
             const settings = resolveSettings(sourcegraph.configuration.get<Settings>().value)
             if (!settings['discussions.decorations.inline']) {
                 return
@@ -40,7 +41,7 @@ export function activate(): void {
             if (thread.target.__typename !== 'DiscussionThreadTargetRepo') {
                 return
             }
-            var target = thread.target as SourcegraphGQL.IDiscussionThreadTargetRepo
+            const target: SourcegraphGQL.IDiscussionThreadTargetRepo = thread.target
             if (target.relativePath !== uri.filePath) {
                 // TODO(slimsag): shouldn't the discussions API return threads created in different files and moved here, too? lol :facepalm:
                 return // comment has since moved to a different file.
@@ -57,8 +58,8 @@ export function activate(): void {
                 )} ago`
 
             // TODO(slimsag): color scheme detection was impossible when this was written, see https://github.com/sourcegraph/sourcegraph/issues/732
-            const color = (global as any).location.host === 'github.com' ? 'black' : '#0366d6' // #3b4d6e
-            const backgroundColor = (global as any).location.host === 'github.com' ? 'white' : 'rgba(28, 126, 214, 0.3)' // #151c28
+            const color = window.location.host === 'github.com' ? 'black' : '#0366d6' // #3b4d6e
+            const backgroundColor = window.location.host === 'github.com' ? 'white' : 'rgba(28, 126, 214, 0.3)' // #151c28
 
             decorations.push({
                 range: new sourcegraph.Range(
@@ -74,16 +75,16 @@ export function activate(): void {
                 after: {
                     contentText: ' 💬 ' + describeThread(shortTitle),
                     linkURL: thread.inlineURL
-                        ? (global as any).location.host
+                        ? window.location.host
                             ? thread.inlineURL.slice(thread.inlineURL.lastIndexOf('#'))
                             : thread.inlineURL
                         : undefined,
                     hoverMessage: ' ' + describeThread(thread.title),
-                    color: color,
+                    color,
                 },
-                backgroundColor: backgroundColor,
+                backgroundColor,
             })
-        })
+        }
 
         try {
             editor.setDecorations(decorationType, decorations)
