@@ -16,6 +16,11 @@ export function activate(): void {
         if (!editor) {
             return
         }
+        const settings = resolveSettings(sourcegraph.configuration.get<Settings>().value)
+        if (!settings['discussions.decorations.inline']) {
+            editor.setDecorations(decorationType, []) // clear decorations
+            return
+        }
 
         const uri = resolveURI(editor.document.uri)
 
@@ -28,11 +33,6 @@ export function activate(): void {
 
         const decorations: sourcegraph.TextDocumentDecoration[] = []
         for (const thread of threads.nodes) {
-            const settings = resolveSettings(sourcegraph.configuration.get<Settings>().value)
-            if (!settings['discussions.decorations.inline']) {
-                return
-            }
-
             if (thread.target.__typename !== 'DiscussionThreadTargetRepo') {
                 return
             }
