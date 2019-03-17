@@ -744,17 +744,17 @@
   resolved "https://registry.yarnpkg.com/@sourcegraph/prettierrc/-/prettierrc-2.2.0.tgz#af4a6fcd465b0a39a07ffbd8f2d3414d01e603e8"
   integrity sha512-kRdHxdAppxYnN7qAQjNTyuG05pjYHFtEUquZauXVXBeaGB4sye3uSkb8wgi34jeaUHG/gWp2f5hQgCCBMizjjA==
 
-"@sourcegraph/tsconfig@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@sourcegraph/tsconfig/-/tsconfig-3.0.0.tgz#dfd8a0072d55a219118f58cfbca71336b58991b2"
-  integrity sha512-/2Q4lAQvHPGkddV7+4FRBgJPIzWw0e364kYq3IkD22H9eHJdA0KHfKXAKmWQjbtVpWSQeNPyVJ1pT5emfef4TQ==
+"@sourcegraph/tsconfig@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@sourcegraph/tsconfig/-/tsconfig-4.0.0.tgz#dd2a406f90760bb789fd89fde4bd0a8d681f2767"
+  integrity sha512-jxrhKbek4yu1HUDpUhqR9hAGFiUgaJ9NIM+c8JEkAnvpW67ab1AUFWb82aSVfZWX1UVqfR84AMr7xP3E8LlL+A==
 
-"@sourcegraph/tslint-config@^11.1.1":
-  version "11.1.1"
-  resolved "https://registry.yarnpkg.com/@sourcegraph/tslint-config/-/tslint-config-11.1.1.tgz#72809e4cc63af171217aecac501cce944a8f07bd"
-  integrity sha512-rXJzqKhWZPoTGpJyT9IbVrLlxNJKbwnE9l06OP0CWrqTjjiSRTtROFJddESjTfqeZogPnV8WbPyCcBwS0uAQeA==
+"@sourcegraph/tslint-config@^12.3.1":
+  version "12.3.1"
+  resolved "https://registry.yarnpkg.com/@sourcegraph/tslint-config/-/tslint-config-12.3.1.tgz#54570f56255c3c4139105fd18ea542e847e0710f"
+  integrity sha512-XG/H+QPARCTIXtL4bLBP1W93MniqBYIkDEkld6gdbRT3i4sBMXw+IwZwC3NdroEjEe5OKgXNBh1Y8edxBL/hdw==
   dependencies:
-    rxjs-tslint-rules "^4.2.0"
+    rxjs-tslint-rules "^4.12.0"
     tslint-config-prettier "^1.6.0"
     tslint-react "^3.2.0"
 
@@ -4377,10 +4377,10 @@ prelude-ls@~1.1.2:
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
   integrity sha1-IZMqVJ9eUv/ZqCf1cOBL5iqX2lQ=
 
-prettier@1.13.5:
-  version "1.13.5"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.13.5.tgz#7ae2076998c8edce79d63834e9b7b09fead6bfd0"
-  integrity sha512-4M90mfvLz6yRf2Dhzd+xPIE6b4xkI8nHMJhsSm9IlfG17g6wujrrm7+H1X8x52tC4cSNm6HmuhCUSNe6Hd5wfw==
+prettier@1.16.4:
+  version "1.16.4"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.16.4.tgz#73e37e73e018ad2db9c76742e2647e21790c9717"
+  integrity sha512-ZzWuos7TI5CKUeQAtFd6Zhm2s6EpAD/ZLApIhsF9pRvRtM1RFo61dM/4MSRUA0SuLugA/zgrZD8m0BaY46Og7g==
 
 private@^0.1.6:
   version "0.1.8"
@@ -4760,7 +4760,7 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
-rxjs-tslint-rules@^4.2.0:
+rxjs-tslint-rules@^4.12.0:
   version "4.18.2"
   resolved "https://registry.yarnpkg.com/rxjs-tslint-rules/-/rxjs-tslint-rules-4.18.2.tgz#5acd6937d9cf337fb5de39f9fde581c00188f3d9"
   integrity sha512-pGcCuslwUp6QQpcHMrBugB1FiCNHBH/5PWOG7LnhBAT3BLQMbiy+I71Zeh6Tbw2x8e9hsxLZ85QYSqjSx+bb3w==
@@ -4984,10 +4984,10 @@ source-map@^0.5.0, source-map@^0.5.3, source-map@^0.5.6:
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.7.tgz#8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
   integrity sha1-igOdLRAh0i0eoUyA2OpGi6LvP8w=
 
-sourcegraph@^20.1.0:
-  version "20.2.0"
-  resolved "https://registry.yarnpkg.com/sourcegraph/-/sourcegraph-20.2.0.tgz#36a99639a5ce32271db340b4df0e4ccb2e4cc20d"
-  integrity sha512-KG3tQ9PNEza5JW2cihalfMBtgMwjtXKaQpO6blE5fLxvD4odrfkCDhb5pW5Ptym2DX/jorbDev1elDc/FYMImw==
+sourcegraph@^23.0.0:
+  version "23.0.0"
+  resolved "https://registry.yarnpkg.com/sourcegraph/-/sourcegraph-23.0.0.tgz#1fb96015af3e84cc9cc2944823f04a7e952ed565"
+  integrity sha512-hQALHrTt+AK5ZAqUAUNhxO7ClSv/xyTjMQPBb+hQykKJrMaHTk+CnJNHs7dRfXYKnbnZeisQRjaxKGX8UecU0Q==
 
 spdx-correct@^3.0.0:
   version "3.1.0"
@@ -5444,7 +5444,7 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^3.0.3:
+typescript@^3.3.3333:
   version "3.3.3333"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.3.3333.tgz#171b2c5af66c59e9431199117a3bcadc66fdcfd6"
   integrity sha512-JjSKsAfuHBE/fB2oZ8NxtRTk5iGcg6hkYXMnZ3Wc+b2RSqejEqTaem11mHASMnFilHrax3sLK0GDzcJrekZYLw==
