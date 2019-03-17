@@ -47,10 +47,7 @@ export function activate(): void {
 
             const shortTitle = thread.title.length > 29 ? thread.title.slice(0, 29) + '…' : thread.title
 
-            const describeThread = (title: string) =>
-                `"${title}" by ${thread.author.displayName || thread.author.username} ${distanceInWordsToNow(
-                    thread.createdAt
-                )} ago`
+            const describeThread = (title: string) => `${thread.author.displayName || thread.author.username}: ${title}`
 
             decorations.push({
                 range: new sourcegraph.Range(
@@ -67,7 +64,7 @@ export function activate(): void {
                             ? thread.inlineURL.slice(thread.inlineURL.lastIndexOf('#'))
                             : thread.inlineURL
                         : undefined,
-                    hoverMessage: ' ' + describeThread(thread.title),
+                    hoverMessage: `${distanceInWordsToNow(thread.createdAt)} ago`,
                     dark: {
                         color: '#0d70e0',
                         backgroundColor: 'rgba(28, 126, 214, 0.15)',
