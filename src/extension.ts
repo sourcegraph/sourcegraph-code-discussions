@@ -52,32 +52,31 @@ export function activate(): void {
                     thread.createdAt
                 )} ago`
 
-            // TODO(slimsag): color scheme detection was impossible when this was written, see https://github.com/sourcegraph/sourcegraph/issues/732
-            const color = window.location.host === 'github.com' ? 'black' : '#0366d6' // #3b4d6e
-            const backgroundColor = window.location.host === 'github.com' ? 'white' : 'rgba(28, 126, 214, 0.3)' // #151c28
-
             decorations.push({
                 range: new sourcegraph.Range(
                     new sourcegraph.Position(
-                        target.relativeSelection.startLine - 1,
+                        target.relativeSelection.startLine,
                         target.relativeSelection.startCharacter
                     ),
-                    new sourcegraph.Position(
-                        target.relativeSelection.endLine - 1,
-                        target.relativeSelection.endCharacter
-                    )
+                    new sourcegraph.Position(target.relativeSelection.endLine, target.relativeSelection.endCharacter)
                 ),
                 after: {
                     contentText: ' 💬 ' + describeThread(shortTitle),
                     linkURL: thread.inlineURL
-                        ? window.location.host
+                        ? sourcegraph.internal.clientApplication === 'sourcegraph'
                             ? thread.inlineURL.slice(thread.inlineURL.lastIndexOf('#'))
                             : thread.inlineURL
                         : undefined,
                     hoverMessage: ' ' + describeThread(thread.title),
-                    color,
+                    dark: {
+                        color: '#0d70e0',
+                        backgroundColor: 'rgba(28, 126, 214, 0.15)',
+                    },
+                    light: {
+                        color: 'black',
+                        backgroundColor: 'white',
+                    },
                 },
-                backgroundColor,
             })
         }
 
