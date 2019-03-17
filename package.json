@@ -13,7 +13,7 @@
     "tslint": "tslint \"src/**.ts\" --project tsconfig.json --config tslint.json",
     "build": "parcel build --out-file dist/extension.js src/extension.ts",
     "symlink-package": "mkdirp dist && lnfs ./package.json ./dist/package.json",
-    "serve": "npm run symlink-package && parcel serve --no-hmr --out-file dist/extension.js src/extension.ts",
+    "serve": "yarn run symlink-package && parcel serve --no-hmr --out-file dist/extension.js src/extension.ts",
     "watch": "tsc -w -p .",
     "graphql": "get-graphql-schema https://sourcegraph.com/.api/graphql --json | gql2ts -n SourcegraphGQL -o src/typings/SourcegraphGQL.d.ts"
   },
