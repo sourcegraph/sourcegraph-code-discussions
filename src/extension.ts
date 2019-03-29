@@ -1,7 +1,8 @@
-import * as sourcegraph from 'sourcegraph'
 import { distanceInWordsToNow } from 'date-fns'
+import * as sourcegraph from 'sourcegraph'
 import { resolveSettings, Settings } from './settings'
 import { fetchDiscussionThreads } from './shared/api'
+import { resolveURI } from './uri'
 
 const decorationType = sourcegraph.app.createDecorationType && sourcegraph.app.createDecorationType()
 
@@ -15,33 +16,28 @@ export function activate(): void {
         if (!editor) {
             return
         }
-
-        const u = new (global as any).URL(editor.document.uri)
-        const uri = {
-            repositoryName: u.pathname.slice(2),
-            revision: u.search.slice(1),
-            filePath: u.hash.slice(1),
+        const settings = resolveSettings(sourcegraph.configuration.get<Settings>().value)
+        if (!settings['discussions.decorations.inline']) {
+            editor.setDecorations(decorationType, []) // clear decorations
+            return
         }
+
+        const uri = resolveURI(editor.document.uri)
 
         const threads = await fetchDiscussionThreads({
             first: 10000,
-            targetRepositoryName: uri.repositoryName,
-            targetRepositoryPath: uri.filePath,
-            relativeRev: uri.revision,
+            targetRepositoryName: uri.repo,
+            targetRepositoryPath: uri.path,
+            relativeRev: uri.rev,
         })
 
-        let decorations: sourcegraph.TextDocumentDecoration[] = []
-        threads.nodes.forEach(thread => {
-            const settings = resolveSettings(sourcegraph.configuration.get<Settings>().value)
-            if (!settings['discussions.decorations.inline']) {
-                return
-            }
-
+        const decorations: sourcegraph.TextDocumentDecoration[] = []
+        for (const thread of threads.nodes) {
             if (thread.target.__typename !== 'DiscussionThreadTargetRepo') {
                 return
             }
-            var target = thread.target as SourcegraphGQL.IDiscussionThreadTargetRepo
-            if (target.relativePath !== uri.filePath) {
+            const target: SourcegraphGQL.IDiscussionThreadTargetRepo = thread.target
+            if (target.relativePath !== uri.path) {
                 // TODO(slimsag): shouldn't the discussions API return threads created in different files and moved here, too? lol :facepalm:
                 return // comment has since moved to a different file.
             }
@@ -51,39 +47,35 @@ export function activate(): void {
 
             const shortTitle = thread.title.length > 29 ? thread.title.slice(0, 29) + '…' : thread.title
 
-            const describeThread = (title: string) =>
-                `"${title}" by ${thread.author.displayName || thread.author.username} ${distanceInWordsToNow(
-                    thread.createdAt
-                )} ago`
-
-            // TODO(slimsag): color scheme detection was impossible when this was written, see https://github.com/sourcegraph/sourcegraph/issues/732
-            const color = (global as any).location.host === 'github.com' ? 'black' : '#0366d6' // #3b4d6e
-            const backgroundColor = (global as any).location.host === 'github.com' ? 'white' : 'rgba(28, 126, 214, 0.3)' // #151c28
+            const describeThread = (title: string) => `${thread.author.displayName || thread.author.username}: ${title}`
 
             decorations.push({
                 range: new sourcegraph.Range(
                     new sourcegraph.Position(
-                        target.relativeSelection.startLine - 1,
+                        target.relativeSelection.startLine,
                         target.relativeSelection.startCharacter
                     ),
-                    new sourcegraph.Position(
-                        target.relativeSelection.endLine - 1,
-                        target.relativeSelection.endCharacter
-                    )
+                    new sourcegraph.Position(target.relativeSelection.endLine, target.relativeSelection.endCharacter)
                 ),
                 after: {
                     contentText: ' 💬 ' + describeThread(shortTitle),
                     linkURL: thread.inlineURL
-                        ? (global as any).location.host
+                        ? sourcegraph.internal.clientApplication === 'sourcegraph'
                             ? thread.inlineURL.slice(thread.inlineURL.lastIndexOf('#'))
                             : thread.inlineURL
                         : undefined,
-                    hoverMessage: ' ' + describeThread(thread.title),
-                    color: color,
+                    hoverMessage: `${distanceInWordsToNow(thread.createdAt)} ago`,
+                    dark: {
+                        color: '#0d70e0',
+                        backgroundColor: 'rgba(28, 126, 214, 0.15)',
+                    },
+                    light: {
+                        color: 'black',
+                        backgroundColor: 'white',
+                    },
                 },
-                backgroundColor: backgroundColor,
             })
-        })
+        }
 
         try {
             editor.setDecorations(decorationType, decorations)

@@ -13,23 +13,23 @@
     "tslint": "tslint \"src/**.ts\" --project tsconfig.json --config tslint.json",
     "build": "parcel build --out-file dist/extension.js src/extension.ts",
     "symlink-package": "mkdirp dist && lnfs ./package.json ./dist/package.json",
-    "serve": "npm run symlink-package && parcel serve --no-hmr --out-file dist/extension.js src/extension.ts",
+    "serve": "yarn run symlink-package && parcel serve --no-hmr --out-file dist/extension.js src/extension.ts",
     "watch": "tsc -w -p .",
     "graphql": "get-graphql-schema https://sourcegraph.com/.api/graphql --json | gql2ts -n SourcegraphGQL -o src/typings/SourcegraphGQL.d.ts"
   },
   "devDependencies": {
     "@sourcegraph/prettierrc": "^2.1.1",
-    "@sourcegraph/tsconfig": "^3.0.0",
-    "@sourcegraph/tslint-config": "^11.1.1",
+    "@sourcegraph/tsconfig": "^4.0.0",
+    "@sourcegraph/tslint-config": "^12.3.1",
     "get-graphql-schema": "^2.1.1",
     "gql2ts": "^1.8.2",
     "lnfs-cli": "^2.1.0",
     "mkdirp": "^0.5.1",
     "parcel-bundler": "^1.10.0",
-    "prettier": "1.13.5",
-    "sourcegraph": "^20.1.0",
+    "prettier": "1.16.4",
+    "sourcegraph": "^23.0.0",
     "tslint": "^5.10.0",
-    "typescript": "^3.0.3"
+    "typescript": "^3.3.3333"
   },
   "dependencies": {
     "@types/date-fns": "^2.6.0",
@@ -98,5 +98,11 @@
         }
       }
     }
-  }
+  },
+  "browserslist": [
+    "last 1 Chrome versions",
+    "last 1 Firefox versions",
+    "last 1 Edge versions",
+    "last 1 Safari versions"
+  ]
 }
