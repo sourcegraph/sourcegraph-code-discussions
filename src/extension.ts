@@ -23,6 +23,9 @@ export function activate(): void {
         }
 
         const uri = resolveURI(editor.document.uri)
+        if (!uri) {
+            return
+        }
 
         const threads = await fetchDiscussionThreads({
             first: 10000,
