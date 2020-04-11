@@ -1,4 +1,5 @@
 {
+  "$schema": "https://raw.githubusercontent.com/sourcegraph/sourcegraph/master/shared/src/schema/extension.schema.json",
   "name": "code-discussions",
   "publisher": "sourcegraph",
   "title": "Code discussions — discuss code contextually, review code continuously.",
@@ -52,7 +53,8 @@
         "category": "Discussions",
         "actionItem": {
           "label": "Discussions",
-          "description": "${config.discussions.decorations.inline && \"Hide\" || \"Show\"} inline discussions"
+          "description": "${config.discussions.decorations.inline && \"Hide\" || \"Show\"} inline discussions",
+          "pressed": "config.discussions.decorations.inline"
         }
       }
     ],
