@@ -26,7 +26,7 @@
     "gql2ts": "^1.8.2",
     "lnfs-cli": "^2.1.0",
     "mkdirp": "^0.5.1",
-    "parcel-bundler": "^1.10.0",
+    "parcel-bundler": "^1.12.4",
     "prettier": "1.16.4",
     "sourcegraph": "^23.0.0",
     "tslint": "^5.10.0",
