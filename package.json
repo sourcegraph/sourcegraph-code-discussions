@@ -3,6 +3,7 @@
   "name": "code-discussions",
   "publisher": "sourcegraph",
   "title": "Code discussions — discuss code contextually, review code continuously.",
+  "wip": true,
   "description": "Lets you write comments on code while browsing, discover discussions while browsing on GitHub, review code continuously, and share knowledge with your team.",
   "activationEvents": [
     "*"
